@@ -1,62 +1,43 @@
--- VanillaHub Protected Loader
-local KEY = getgenv().VHKey
+-- [[ VanilllaHub / VanillaChecker ]]
+local KEY = getgenv().VanillaChecker
 local LP = game:GetService("Players").LocalPlayer
+
 local function fetch(url)
-    return game:HttpGet(url)
+    local success, result = pcall(function()
+        return game:HttpGet(url)
+    end)
+    return success and result or nil
 end
--- No key provided
-if not KEY then
-    LP:Kick("VanillaHub: No key provided!")
+
+-- 1. Check for Key presence
+if not KEY or KEY == "" then
+    LP:Kick("VanilllaHub: Please provide a key in the script!")
     return
 end
--- Check if valid
-local validKeys = {
-    "VANILLA-ABC123",
-}
-local keyValid = false
-for _, k in ipairs(validKeys) do
-    if k == KEY:gsub("%s+", "") then
-        keyValid = true
-        break
-    end
-end
-if not keyValid then
-    LP:Kick("VanillaHub: Invalid or Expired Key!")
+
+-- 2. Validate Key against your GitHub
+local keyData = fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaChecker/main/keys.txt")
+
+if not keyData or not keyData:find(KEY) then
+    LP:Kick("VanilllaHub: Invalid or Expired Key")
     return
 end
--- Load correct game script
-if game.PlaceId == 13822889 then -- Lumber Tycoon 2
-    local scripts = {
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla1.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla2.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla3.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla4.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla5.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla6.lua",
-        "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla7.lua",
-    }
-    for i, url in ipairs(scripts) do
-        local ok, src = pcall(fetch, url)
-        if ok and src then
-            local fn, err = loadstring(src)
-            if fn then
-                local runOk, runErr = pcall(fn)
-                if not runOk then
-                    warn("[VanillaHub] Vanilla"..i.." error: "..tostring(runErr))
-                end
-            else
-                warn("[VanillaHub] Failed to compile Vanilla"..i..": "..tostring(err))
-            end
-        else
-            warn("[VanillaHub] Failed to fetch Vanilla"..i)
-        end
-        task.wait(0.3)
-    end
-elseif game.PlaceId == 606849621 then -- Jailbreak
-    loadstring(fetch("https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Jailbreak.lua"))()
-elseif game.PlaceId == 185655149 then -- Bloxburg
-    loadstring(fetch("https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Bloxburg.lua"))()
+
+-- 3. Game Detection
+if game.PlaceId == 13822889 then -- 🌳 Lumber Tycoon 2
+    loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Lt2/main/VanillaHub.Lt2.lua"))()
+
+elseif game.PlaceId == 606849621 then -- 🏎️ Jailbreak
+    -- Replace with your Jailbreak loader URL when ready
+    LP:Kick("VanilllaHub: Jailbreak support coming soon!")
+
+elseif game.PlaceId == 185655149 then -- 🏠 Bloxburg
+    -- Replace with your Bloxburg loader URL when ready
+    LP:Kick("VanilllaHub: Bloxburg support coming soon!")
+
 else
-    LP:Kick("VanillaHub: This game is not supported!")
+    LP:Kick("VanilllaHub: This game is not supported.")
 end
-getgenv().VHKey = nil
+
+-- Cleanup
+getgenv().VanillaChecker = nil
