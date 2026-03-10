@@ -47,9 +47,9 @@ end
 
 -- Game script map
 local gameScripts = {
-    [13822889]  = "https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/LT2.lua",
-    [606849621] = "https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Jailbreak.lua",
-    [185655149] = "https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Bloxburg.lua",
+    [13822889]  = "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/LT2.lua",
+    [] = "",
+    [] = "",
 }
 
 local scriptUrl = gameScripts[game.PlaceId]
