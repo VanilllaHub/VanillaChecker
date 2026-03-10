@@ -4,40 +4,32 @@ local LP = game:GetService("Players").LocalPlayer
 local function fetch(url)
     return game:HttpGet(url)
 end
+
 -- No key provided
 if not KEY then
-    LP:Kick("Key Has Expired!")
+    LP:Kick("❌ VanillaHub: No key provided!")
     return
 end
--- Fetch keys
-local success, keyData = pcall(fetch, "https://raw.githubusercontent.com/VanillaHub/VanillaChecker/main/keys.txt")
-if not success then
-    LP:Kick("❌ VanillaHub: Could not reach key server. Try again.")
-    return
-end
--- Fetch expired keys
-local expSuccess, expData = pcall(fetch, "https://raw.githubusercontent.com/VanillaHub/VanillaChecker/main/expired.txt")
--- Check if expired
-if expSuccess and expData then
-    for line in expData:gmatch("[^\n]+") do
-        if line:gsub("%s+", "") == KEY:gsub("%s+", "") then
-            LP:Kick("Key Has Expired!")
-            return
-        end
-    end
-end
+
 -- Check if valid
+local validKeys = {
+    "VANILLA-ABC123",
+    "VANILLA-XYZ456",
+}
+
 local keyValid = false
-for line in keyData:gmatch("[^\n]+") do
-    if line:gsub("%s+", "") == KEY:gsub("%s+", "") then
+for _, k in ipairs(validKeys) do
+    if k == KEY:gsub("%s+", "") then
         keyValid = true
         break
     end
 end
+
 if not keyValid then
-    LP:Kick("Key Has Expired!")
+    LP:Kick("❌ VanillaHub: Invalid or Expired Key!")
     return
 end
+
 -- Game script map
 local gameScripts = {
     [13822889] = {
@@ -52,11 +44,13 @@ local gameScripts = {
     [606849621] = {},
     [185655149] = {},
 }
+
 local scripts = gameScripts[game.PlaceId]
 if not scripts or #scripts == 0 then
     LP:Kick("❌ VanillaHub: This game is not supported!")
     return
 end
+
 -- Key valid + correct game — load scripts
 for i, url in ipairs(scripts) do
     local ok, src = pcall(fetch, url)
