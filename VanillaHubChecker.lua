@@ -14,7 +14,6 @@ end
 -- Check if valid
 local validKeys = {
     "VANILLA-ABC123",
-    "VANILLA-XYZ456",
 }
 
 local keyValid = false
@@ -30,9 +29,9 @@ if not keyValid then
     return
 end
 
--- Game script map
-local gameScripts = {
-    [13822889] = {
+-- Load correct game script
+if game.PlaceId == 13822889 then -- 🌳 Lumber Tycoon 2
+    local scripts = {
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla1.lua",
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla2.lua",
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla3.lua",
@@ -40,33 +39,30 @@ local gameScripts = {
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla5.lua",
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla6.lua",
         "https://raw.githubusercontent.com/VanillaHub/VanillaHub.Lt2/main/Vanilla7.lua",
-    },
-    [606849621] = {},
-    [185655149] = {},
-}
-
-local scripts = gameScripts[game.PlaceId]
-if not scripts or #scripts == 0 then
-    LP:Kick("❌ VanillaHub: This game is not supported!")
-    return
-end
-
--- Key valid + correct game — load scripts
-for i, url in ipairs(scripts) do
-    local ok, src = pcall(fetch, url)
-    if ok and src then
-        local fn, err = loadstring(src)
-        if fn then
-            local runOk, runErr = pcall(fn)
-            if not runOk then
-                warn("[VanillaHub] Vanilla"..i.." error: "..tostring(runErr))
+    }
+    for i, url in ipairs(scripts) do
+        local ok, src = pcall(fetch, url)
+        if ok and src then
+            local fn, err = loadstring(src)
+            if fn then
+                local runOk, runErr = pcall(fn)
+                if not runOk then
+                    warn("[VanillaHub] Vanilla"..i.." error: "..tostring(runErr))
+                end
+            else
+                warn("[VanillaHub] Failed to compile Vanilla"..i..": "..tostring(err))
             end
         else
-            warn("[VanillaHub] Failed to compile Vanilla"..i..": "..tostring(err))
+            warn("[VanillaHub] Failed to fetch Vanilla"..i)
         end
-    else
-        warn("[VanillaHub] Failed to fetch Vanilla"..i)
+        task.wait(0.3)
     end
-    task.wait(0.3)
+elseif game.PlaceId == 606849621 then -- Jailbreak
+    loadstring(fetch("https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Jailbreak.lua"))()
+elseif game.PlaceId == 185655149 then -- Bloxburg
+    loadstring(fetch("https://raw.githubusercontent.com/kode-sec/Butter/refs/heads/main/Bloxburg.lua"))()
+else
+    LP:Kick("❌ VanillaHub: This game is not supported!")
 end
+
 getgenv().VHKey = nil
