@@ -17,8 +17,20 @@ end
 
 -- 2. Validate Key against your GitHub
 local keyData = fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaChecker/main/keys.txt")
+if not keyData then
+    LP:Kick("VanilllaHub: Could not reach key server!")
+    return
+end
 
-if not keyData or not keyData:find(KEY) then
+local keyValid = false
+for line in keyData:gmatch("[^\r\n]+") do
+    if line:match("^%s*(.-)%s*$") == KEY then
+        keyValid = true
+        break
+    end
+end
+
+if not keyValid then
     LP:Kick("VanilllaHub: Invalid or Expired Key")
     return
 end
@@ -26,15 +38,10 @@ end
 -- 3. Game Detection
 if game.PlaceId == 13822889 then -- 🌳 Lumber Tycoon 2
     loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Lt2/main/VanillaHub.Lt2.lua"))()
-
 elseif game.PlaceId == 606849621 then -- 🏎️ Jailbreak
-    -- Replace with your Jailbreak loader URL when ready
     LP:Kick("VanilllaHub: Jailbreak support coming soon!")
-
 elseif game.PlaceId == 185655149 then -- 🏠 Bloxburg
-    -- Replace with your Bloxburg loader URL when ready
     LP:Kick("VanilllaHub: Bloxburg support coming soon!")
-
 else
     LP:Kick("VanilllaHub: This game is not supported.")
 end
