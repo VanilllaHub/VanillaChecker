@@ -35,7 +35,7 @@ if not keyValid then
     return
 end
 
--- 3. Game Detection
+-- Game Detection
 if game.PlaceId == 13822889 then -- 🌳 Lumber Tycoon 2
     loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Lt2/main/VanillaHub.Lt2.lua"))()
 elseif game.PlaceId == 606849621 then -- 🏎️ Jailbreak
