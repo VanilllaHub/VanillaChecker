@@ -32,8 +32,8 @@ end
 
 if game.PlaceId == 13822889 then
     loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Lt2/main/VanillaHub.Lt2.lua"))()
-elseif game.PlaceId == 606849621 then
-    LP:Kick("VanilllaHub: Jailbreak support coming soon!")
+elseif game.PlaceId == 537413528 then
+    LP:Kick("VanilllaHub: Build A Boat For Treasure support coming soon!")
 elseif game.PlaceId == 185655149 then
     LP:Kick("VanilllaHub: Bloxburg support coming soon!")
 else
