@@ -31,11 +31,17 @@ if not keyValid then
 end
 
 if game.PlaceId == 13822889 then
+    -- Lumber Tycoon 2
     loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Lt2/main/VanillaHub.Lt2.lua"))()
+
 elseif game.PlaceId == 537413528 then
-    LP:Kick("VanilllaHub: Build A Boat For Treasure support coming soon!")
+    -- Build A Boat For Treasure
+    loadstring(fetch("https://raw.githubusercontent.com/VanilllaHub/VanillaHub.Build-a-Boat/main/VanillaHub.Build-a-Boat.lua"))()
+
 elseif game.PlaceId == 185655149 then
+    -- Bloxburg
     LP:Kick("VanilllaHub: Bloxburg support coming soon!")
+
 else
     LP:Kick("VanilllaHub: This game is not supported.")
 end
